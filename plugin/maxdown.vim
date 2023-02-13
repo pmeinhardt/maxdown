@@ -26,5 +26,8 @@ function! s:preview()
   call s:show(tmp)
 endfunction
 
+nnoremap <silent> <Plug>MaxdownCompile :call <SID>compile()<CR>
+nnoremap <silent> <Plug>MaxdownPreview :call <SID>preview()<CR>
+
 command! MaxdownCompile call s:compile()
 command! MaxdownPreview call s:preview()
