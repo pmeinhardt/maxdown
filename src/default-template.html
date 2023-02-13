@@ -3,8 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>{{ title }}</title>
+    <style>
+      .markdown-body {
+        padding: 2rem;
+      }
+
+      {{ css }}
+    </style>
   </head>
-  <body>
+  <body class="markdown-body">
     {{ result }}
   </body>
 </html>

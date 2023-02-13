@@ -29,7 +29,8 @@ struct Args {
     title: String,
 }
 
-const TEMPLATE: &str = include_str!("default.html");
+const TEMPLATE: &str = include_str!("default-template.html");
+const CSS: &str = include_str!("github.css");
 
 fn bail(message: &str, error: &Error) -> ! {
     eprintln!("{message}: {error}");
@@ -86,6 +87,7 @@ fn main() {
     let html = convert(&input, args.dangerous).unwrap();
 
     let values = HashMap::from([
+        ("css", &*CSS),
         ("result", &*html),
         ("title", &*args.title),
     ]);
