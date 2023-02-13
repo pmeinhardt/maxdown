@@ -9,4 +9,8 @@
 "
 
 let s:path = expand('<sfile>:p:h')
-exe 'set runtimepath+=' . escape(s:path, '\,')
+execute 'set runtimepath+=' . escape(s:path, '\,')
+
+" Here is an example of defining a mapping for previewing markdown files
+
+autocmd FileType markdown nnoremap <buffer> <localleader>m <Plug>MaxdownPreview
