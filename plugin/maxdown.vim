@@ -3,19 +3,28 @@ if exists('g:loaded_maxdown')
 endif
 let g:loaded_maxdown = 1
 
-if !exists('g:maxdown_command')
-  let g:maxdown_command = 'maxdown --dangerous -'
-endif
+let s:profile = 'release'
 
-if !exists('g:maxdown_preview_command')
-  let g:maxdown_preview_command = 'qlmanage -p -c public.html'
-endif
+let s:path = fnamemodify(fnamemodify(resolve(expand('<sfile>:p')), ':h'), ':h')
+let s:cmd = s:path . '/target/' . s:profile . '/maxdown'
 
-function! s:preview()
-  let tmpfile = tempname()
-  let cmd = g:maxdown_command . ' > ' . tmpfile
-  call system(cmd, bufnr('%'))
-  call system(g:maxdown_preview_command . ' ' . tmpfile)
+function! s:compile()
+  call system('cd ' . s:path . ' && cargo build --release --locked')
 endfunction
 
+function! s:convert(fpath, bnum)
+  call system(s:cmd . ' --dangerous - > ' . a:fpath, a:bnum)
+endfunction
+
+function! s:show(fpath)
+  call system('qlmanage -p -c public.html ' . a:fpath)
+endfunction
+
+function! s:preview()
+  let tmp = tempname()
+  call s:convert(tmp, bufnr('%'))
+  call s:show(tmp)
+endfunction
+
+command! MaxdownCompile call s:compile()
 command! MaxdownPreview call s:preview()
