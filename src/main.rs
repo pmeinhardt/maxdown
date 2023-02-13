@@ -1,6 +1,8 @@
 use std::collections::HashMap;
+use std::fs;
 use std::io;
 use std::io::prelude::*;
+use std::process;
 
 use clap::Parser;
 use markdown as md;
@@ -68,7 +70,20 @@ fn main() -> io::Result<()> {
         ("title", &*args.title),
     ]);
 
-    println!("{}", render(TEMPLATE, &values));
+    let template = match args.template {
+        Some(path) => {
+            match fs::read_to_string(path) {
+                Err(error) => {
+                    eprintln!("Failed to load template: {}", error);
+                    process::exit(1)
+                },
+                Ok(content) => content,
+            }
+        },
+        None => String::from(TEMPLATE),
+    };
+
+    println!("{}", render(&template, &values));
 
     Ok(())
 }
