@@ -1,8 +1,8 @@
 use std::collections::HashMap;
-use std::fs;
-use std::io;
+use std::fs::{File, read_to_string as read};
+use std::io::{self, Error};
 use std::io::prelude::*;
-use std::process;
+use std::process::exit;
 
 use clap::Parser;
 use markdown as md;
@@ -10,21 +10,45 @@ use regex::Regex;
 
 /// Convert Markdown to HTML
 #[derive(Parser, Debug)]
+#[command(arg_required_else_help(true))]
+#[command(version)]
 struct Args {
+    /// Path to the input markdown file or "-" for stdin
+    path: String,
+
     /// Only use this if you trust the authors of the document
     #[arg(short, long)]
     dangerous: bool,
 
-    /// Template to use for rendering
+    /// Template to use for output
     #[arg(short, long, value_name = "path")]
     template: Option<String>,
 
     /// Title to pass to the template
-    #[arg(long, value_name = "title", default_value = "Markdown")]
+    #[arg(long, value_name = "title", default_value = "Preview")]
     title: String,
 }
 
 const TEMPLATE: &str = include_str!("default.html");
+
+fn bail(message: &str, error: &Error) -> ! {
+    eprintln!("{message}: {error}");
+    exit(1)
+}
+
+fn slurp(path: &str) -> Result<String, Error> {
+    let mut buffer = String::new();
+
+    if path == "-" {
+        let mut stdin = io::stdin();
+        stdin.read_to_string(&mut buffer)?;
+    } else {
+        let mut file = File::open(path)?;
+        file.read_to_string(&mut buffer)?;
+    }
+
+    Ok(buffer)
+}
 
 fn convert(input: &str, dangerous: bool) -> Result<String, String> {
     let options = &md::Options {
@@ -55,15 +79,11 @@ fn render(template: &str, values: &HashMap<&str, &str>) -> String {
     result
 }
 
-fn main() -> io::Result<()> {
+fn main() {
     let args = Args::parse();
 
-    let mut stdin = io::stdin();
-    let mut buffer = String::new();
-
-    stdin.read_to_string(&mut buffer)?;
-
-    let html = convert(&buffer, args.dangerous).unwrap();
+    let input = slurp(&args.path).unwrap_or_else(|error| bail("Failed to read input", &error));
+    let html = convert(&input, args.dangerous).unwrap();
 
     let values = HashMap::from([
         ("result", &*html),
@@ -71,19 +91,9 @@ fn main() -> io::Result<()> {
     ]);
 
     let template = match args.template {
-        Some(path) => {
-            match fs::read_to_string(path) {
-                Err(error) => {
-                    eprintln!("Failed to load template: {}", error);
-                    process::exit(1)
-                },
-                Ok(content) => content,
-            }
-        },
+        Some(path) => read(path).unwrap_or_else(|error| bail("Failed to read template", &error)),
         None => String::from(TEMPLATE),
     };
 
     println!("{}", render(&template, &values));
-
-    Ok(())
 }
