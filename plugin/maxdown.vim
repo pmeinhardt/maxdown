@@ -13,7 +13,7 @@ function! s:compile()
 endfunction
 
 function! s:convert(fpath, bnum)
-  call system(s:cmd . ' --dangerous - > ' . a:fpath, a:bnum)
+  call system(s:cmd . ' --dangerous --output ' . a:fpath . ' -', a:bnum)
 endfunction
 
 function! s:show(fpath)
@@ -21,7 +21,7 @@ function! s:show(fpath)
 endfunction
 
 function! s:preview()
-  let tmp = tempname()
+  let tmp = fnameescape(tempname())
   call s:convert(tmp, bufnr('%'))
   call s:show(tmp)
 endfunction
