@@ -1,7 +1,7 @@
 use std::collections::HashMap;
-use std::fs::{File, read_to_string as read};
-use std::io::{self, Error};
+use std::fs::{read_to_string as read, File};
 use std::io::prelude::*;
+use std::io::{self, Error};
 use std::process::exit;
 
 use clap::Parser;
@@ -86,11 +86,7 @@ fn main() {
     let input = slurp(&args.path).unwrap_or_else(|error| bail("Failed to read input", &error));
     let html = convert(&input, args.dangerous).unwrap();
 
-    let values = HashMap::from([
-        ("css", &*CSS),
-        ("result", &*html),
-        ("title", &*args.title),
-    ]);
+    let values = HashMap::from([("css", &*CSS), ("result", &*html), ("title", &*args.title)]);
 
     let template = match args.template {
         Some(path) => read(path).unwrap_or_else(|error| bail("Failed to read template", &error)),
