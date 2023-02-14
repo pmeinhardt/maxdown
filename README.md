@@ -1,5 +1,7 @@
 # Maxdown 🚲
 
+[![checks](https://github.com/pmeinhardt/maxdown/actions/workflows/build.yml/badge.svg)](https://github.com/pmeinhardt/maxdown/actions/workflows/build.yml)
+
 <!-- TODO: Insert screenshot -->
 
 ## Before you get going
