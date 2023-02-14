@@ -2,7 +2,7 @@
 
 [![checks](https://github.com/pmeinhardt/maxdown/actions/workflows/build.yml/badge.svg)](https://github.com/pmeinhardt/maxdown/actions/workflows/build.yml)
 
-<!-- TODO: Insert screenshot -->
+![](./media/banner.png)
 
 ## Before you get going
 
