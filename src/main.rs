@@ -1,12 +1,15 @@
 use std::collections::HashMap;
-use std::fs::{read_to_string as read, File};
+use std::fs;
 use std::io::prelude::*;
 use std::io::{self, Error};
-use std::process::exit;
+use std::process;
 
 use clap::Parser;
-use markdown as md;
+use markdown;
 use regex::Regex;
+
+const TEMPLATE: &str = include_str!("default-template.html");
+const CSS: &str = include_str!("github.css");
 
 /// Convert Markdown to HTML
 #[derive(Parser, Debug)]
@@ -29,39 +32,38 @@ struct Args {
     title: String,
 }
 
-const TEMPLATE: &str = include_str!("default-template.html");
-const CSS: &str = include_str!("github.css");
-
 fn bail(message: &str, error: &Error) -> ! {
     eprintln!("{message}: {error}");
-    exit(1)
+
+    let _ = io::stdout().lock().flush();
+    let _ = io::stderr().lock().flush();
+
+    process::exit(1)
 }
 
 fn slurp(path: &str) -> Result<String, Error> {
-    let mut buffer = String::new();
-
     if path == "-" {
-        let mut stdin = io::stdin();
-        stdin.read_to_string(&mut buffer)?;
-    } else {
-        let mut file = File::open(path)?;
-        file.read_to_string(&mut buffer)?;
+        return io::read_to_string(io::stdin());
     }
 
-    Ok(buffer)
+    fs::read_to_string(path)
+}
+
+fn read(path: &str) -> Result<String, Error> {
+    fs::read_to_string(path)
 }
 
 fn convert(input: &str, dangerous: bool) -> Result<String, String> {
-    let options = &md::Options {
-        compile: md::CompileOptions {
+    let options = &markdown::Options {
+        compile: markdown::CompileOptions {
             allow_dangerous_html: dangerous,
             allow_dangerous_protocol: dangerous,
-            ..md::CompileOptions::gfm()
+            ..markdown::CompileOptions::gfm()
         },
-        ..md::Options::gfm()
+        ..markdown::Options::gfm()
     };
 
-    md::to_html_with_options(input, &options)
+    markdown::to_html_with_options(input, &options)
 }
 
 fn replace(template: &str, key: &str, value: &str) -> String {
@@ -89,7 +91,7 @@ fn main() {
     let values = HashMap::from([("css", &*CSS), ("result", &*html), ("title", &*args.title)]);
 
     let template = match args.template {
-        Some(path) => read(path).unwrap_or_else(|error| bail("Failed to read template", &error)),
+        Some(path) => read(&path).unwrap_or_else(|error| bail("Failed to read template", &error)),
         None => String::from(TEMPLATE),
     };
 
