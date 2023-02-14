@@ -27,3 +27,13 @@ jobs:
         run: cargo build --locked
       - name: Run
         run: cargo run --quiet -- --help
+  format:
+    runs-on: ubuntu-latest
+    container: rust:slim-bullseye
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install rustfmt
+        run: rustup component add rustfmt
+      - name: Check format
+        run: rustfmt --check **/*.rs
