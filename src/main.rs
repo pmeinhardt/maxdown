@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt::Display;
 use std::fs::{self, read_to_string as read, write};
 use std::io::prelude::*;
 use std::io::{self, Error};
@@ -36,7 +37,17 @@ struct Args {
     title: String,
 }
 
-fn bail(message: &str, error: &Error) -> ! {
+trait UnwrapOrBail<T, E: Display> {
+    fn unwrap_or_bail(self, message: &str) -> T;
+}
+
+impl<T, E: Display> UnwrapOrBail<T, E> for Result<T, E> {
+    fn unwrap_or_bail(self, message: &str) -> T {
+        self.unwrap_or_else(|error| bail(message, &error))
+    }
+}
+
+fn bail<E: Display>(message: &str, error: &E) -> ! {
     eprintln!("{message}: {error}");
 
     let _ = io::stdout().lock().flush();
@@ -85,22 +96,20 @@ fn render(template: &str, values: &HashMap<&str, &str>) -> String {
 fn main() {
     let args = Args::parse();
 
-    let input = slurp(&args.path).unwrap_or_else(|error| bail("Failed to read input", &error));
+    let input = slurp(&args.path).unwrap_or_bail("Failed to read input");
     let html = convert(&input, args.dangerous).unwrap();
 
     let values = HashMap::from([("css", &*CSS), ("result", &*html), ("title", &*args.title)]);
 
     let template = match args.template {
-        Some(path) => read(&path).unwrap_or_else(|error| bail("Failed to read template", &error)),
+        Some(path) => read(&path).unwrap_or_bail("Failed to read template"),
         None => String::from(TEMPLATE),
     };
 
     let result = render(&template, &values);
 
     match args.output {
-        Some(path) => {
-            write(path, result).unwrap_or_else(|error| bail("Failed to write output", &error))
-        }
+        Some(path) => write(path, result).unwrap_or_bail("Failed to write output"),
         None => println!("{}", result),
     }
 }
