@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::fs;
+use std::fs::{self, read_to_string as read, write};
 use std::io::prelude::*;
 use std::io::{self, Error};
 use std::process;
@@ -22,6 +22,10 @@ struct Args {
     /// Only use this if you trust the authors of the document
     #[arg(short, long)]
     dangerous: bool,
+
+    /// File to write output to [default: stdout]
+    #[arg(short, long, value_name = "path")]
+    output: Option<String>,
 
     /// Template to use for output
     #[arg(short, long, value_name = "path")]
@@ -46,10 +50,6 @@ fn slurp(path: &str) -> Result<String, Error> {
         return io::read_to_string(io::stdin());
     }
 
-    fs::read_to_string(path)
-}
-
-fn read(path: &str) -> Result<String, Error> {
     fs::read_to_string(path)
 }
 
@@ -95,5 +95,12 @@ fn main() {
         None => String::from(TEMPLATE),
     };
 
-    println!("{}", render(&template, &values));
+    let result = render(&template, &values);
+
+    match args.output {
+        Some(path) => {
+            write(path, result).unwrap_or_else(|error| bail("Failed to write output", &error))
+        }
+        None => println!("{}", result),
+    }
 }
