@@ -25,17 +25,31 @@ function! s:compile() abort
 endfunction
 
 function! s:convert(fpath, bnum) abort
-  call s:exec(s:cmd . ' --dangerous --output ' . a:fpath . ' -', a:bnum)
+  let l:cmd = s:cmd . ' --dangerous --output ' . shellescape(a:fpath) . ' -'
+  call s:exec(l:cmd, a:bnum)
 endfunction
 
-function! s:show(fpath) abort
-  call s:exec('qlmanage -p -c public.html ' . a:fpath)
+function! s:show(fpath, title) abort
+  try
+    call ql#view(a:fpath, a:title)
+  catch /^Vim\%((\a\+)\)\=:E117:/
+    if executable('qlmanage')
+      call s:exec('qlmanage -p -c public.html ' . shellescape(a:fpath))
+    else
+      call s:exec('open ' . shellescape(a:fpath))
+    endif
+  endtry
+endfunction
+
+function! s:tempname(ext) abort
+  let temp = tempname()
+  return temp . a:ext
 endfunction
 
 function! s:preview() abort
-  let tmp = fnameescape(tempname())
-  call s:convert(tmp, bufnr('%'))
-  call s:show(tmp)
+  let temp = s:tempname('.html')
+  call s:convert(temp, bufnr('%'))
+  call s:show(temp, expand('%:t'))
 endfunction
 
 nnoremap <silent> <Plug>MaxdownCompile :call <SID>compile()<CR>
