@@ -11,6 +11,12 @@
 let s:path = expand('<sfile>:p:h')
 execute 'set runtimepath+=' . escape(s:path, '\,')
 
+let s:qlpath = resolve(s:path . '/../ql')
+
+if isdirectory(s:qlpath)
+  execute 'set runtimepath+=' . escape(s:qlpath, '\,')
+endif
+
 " Here is an example of defining a mapping for previewing markdown files
 
-autocmd FileType markdown nnoremap <buffer> <localleader>m <Plug>MaxdownPreview
+autocmd FileType markdown nnoremap <buffer> <localleader><space> <Plug>MaxdownPreview

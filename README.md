@@ -8,8 +8,6 @@
 
 You will need [`cargo`](https://doc.rust-lang.org/cargo/index.html) in order to build the `maxdown` command-line tool.
 
-The Vim plugin is currently only targeted at [macOS](https://support.apple.com/macos).
-
 ## Installation
 
 If you use [vim-plug](https://github.com/junegunn/vim-plug), add this line to your Vim configuration file:
@@ -41,6 +39,14 @@ autocmd FileType markdown nnoremap <buffer> <localleader>m <Plug>MaxdownPreview
 ```
 
 This will create a normal-mode mapping to preview the current markdown buffer.
+
+## Enhancements
+
+When the `ql` [Vim plugin](https://github.com/pmeinhardt/ql) is loaded, previews on macOS will look more neat (no `[DEBUG]` in the title):
+
+```vim
+Plug 'pmeinhardt/ql', {'do': ':QuickLookCompile'}
+```
 
 ## References
 
