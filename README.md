@@ -8,6 +8,8 @@
 
 You will need [`cargo`](https://doc.rust-lang.org/cargo/index.html) in order to build the `maxdown` command-line tool.
 
+In case you are using [Homebrew](https://brew.sh/), it should be as easy as `brew install rust`.
+
 ## Installation
 
 If you use [vim-plug](https://github.com/junegunn/vim-plug), add this line to your Vim configuration file:
