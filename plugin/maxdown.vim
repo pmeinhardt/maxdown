@@ -24,8 +24,20 @@ function! s:compile() abort
   call s:exec('cd ' . s:path . ' && cargo build --release --locked')
 endfunction
 
-function! s:convert(fpath, bnum) abort
-  let l:cmd = s:cmd . ' --dangerous --output ' . shellescape(a:fpath) . ' -'
+function! s:convert(dest, source, bnum) abort
+  let l:cmd = s:cmd
+
+  let args = [
+        \ '--dangerous',
+        \ '--base ' . shellescape(a:source),
+        \ '--output ' . shellescape(a:dest),
+        \ '-'
+        \ ]
+
+  for arg in args
+    let l:cmd .= ' ' . arg
+  endfor
+
   call s:exec(l:cmd, a:bnum)
 endfunction
 
@@ -47,8 +59,9 @@ function! s:tempname(ext) abort
 endfunction
 
 function! s:preview() abort
+  let source = expand('%:p')
   let temp = s:tempname('.html')
-  call s:convert(temp, bufnr('%'))
+  call s:convert(temp, source, bufnr('%'))
   call s:show(temp, expand('%:t'))
 endfunction
 
