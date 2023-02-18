@@ -20,6 +20,10 @@ struct Args {
     /// Path to the input markdown file or "-" for stdin
     path: String,
 
+    /// Base URL to use for all relative URLs in the document
+    #[arg(short, long, value_name = "url")]
+    base: Option<String>,
+
     /// Only use this if you trust the authors of the document
     #[arg(long)]
     dangerous: bool,
@@ -98,8 +102,14 @@ fn main() {
 
     let input = slurp(&args.path).unwrap_or_bail("Failed to read input");
     let html = convert(&input, args.dangerous).unwrap();
+    let base = args.base.unwrap_or(String::from(""));
 
-    let values = HashMap::from([("css", &*CSS), ("result", &*html), ("title", &*args.title)]);
+    let values = HashMap::from([
+        ("base", &*base),
+        ("css", &*CSS),
+        ("result", &*html),
+        ("title", &*args.title),
+    ]);
 
     let template = match args.template {
         Some(path) => read(&path).unwrap_or_bail("Failed to read template"),
