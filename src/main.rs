@@ -21,7 +21,7 @@ struct Args {
     path: String,
 
     /// Only use this if you trust the authors of the document
-    #[arg(short, long)]
+    #[arg(long)]
     dangerous: bool,
 
     /// File to write output to [default: stdout]
