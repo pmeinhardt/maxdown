@@ -53,16 +53,11 @@ function! s:show(fpath, title) abort
   endtry
 endfunction
 
-function! s:tempname(ext) abort
-  let temp = tempname()
-  return temp . a:ext
-endfunction
-
 function! s:preview() abort
   let source = expand('%:p')
-  let temp = s:tempname('.html')
-  call s:convert(temp, source, bufnr('%'))
-  call s:show(temp, expand('%:t'))
+  let dest = expand('~/.maxdown.preview.html')
+  call s:convert(dest, source, bufnr('%'))
+  call s:show(dest, expand('%:t'))
 endfunction
 
 nnoremap <silent> <Plug>MaxdownCompile :call <SID>compile()<CR>
