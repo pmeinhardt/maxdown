@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+BASE="https://raw.githubusercontent.com/sindresorhus/github-markdown-css/main"
+
+CSS="$BASE/github-markdown.css"
+LICENSE="$BASE/license"
+
+{
+  printf '/*\n'
+  curl --silent --show-error "$LICENSE"
+  printf '*/\n\n'
+  curl --silent --show-error "$CSS"
+} > src/github.css

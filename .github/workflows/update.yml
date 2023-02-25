@@ -1,0 +1,32 @@
+name: update
+
+on:
+  # Trigger once every week to check for updates
+  schedule:
+    - cron: "45 6 * * 3"
+
+  # Allow manually triggering this workflow
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Update CSS
+        run: script/update-css
+      - name: Create or update pull-request
+        id: create-pull-reques
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: Update CSS 💅
+          body: https://github.com/sindresorhus/github-markdown-css
+          commit-message: Update CSS 💅
+          delete-branch: true
+          labels: automated pull-request
+      - name: Print pull-request details
+        run: |
+          echo -n "Pull request ${{ steps.create-pull-request.outputs.pull-request-operation }}:"
+          echo -n " ${{ steps.create-pull-request.outputs.pull-request-url }}"
+          echo -n " (${{ steps.create-pull-request.outputs.pull-request-head-sha }})"
