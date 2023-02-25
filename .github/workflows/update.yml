@@ -17,7 +17,7 @@ jobs:
       - name: Update CSS
         run: script/update-css
       - name: Create or update pull-request
-        id: create-pull-reques
+        id: create-pull-request
         uses: peter-evans/create-pull-request@v4
         with:
           title: Update CSS 💅
