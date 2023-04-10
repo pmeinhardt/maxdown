@@ -47,8 +47,10 @@ function! s:show(fpath, title) abort
   catch /^Vim\%((\a\+)\)\=:E117:/
     if executable('qlmanage')
       call s:exec('qlmanage -p -c public.html ' . shellescape(a:fpath))
-    else
+    elseif executable('open')
       call s:exec('open ' . shellescape(a:fpath))
+    else
+      call s:exec('xdg-open ' . shellescape(a:fpath))
     endif
   endtry
 endfunction
