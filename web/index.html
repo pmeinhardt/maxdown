@@ -6,11 +6,13 @@
   </head>
   <body>
     <script type="module">
-      import init, { convert } from "./pkg/maxdown.js";
+      import init, { md } from "./pkg/maxdown.js";
 
       await init();
 
-      document.write(convert("**Hello World**", true));
+      document.open();
+      document.write(md("**Hello World**", true));
+      document.close();
     </script>
   </body>
 </html>

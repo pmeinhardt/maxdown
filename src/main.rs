@@ -8,10 +8,6 @@ use std::io::{self, Error};
 use std::process;
 
 use clap::Parser;
-use regex::Regex;
-
-const TEMPLATE: &str = include_str!("default-template.html");
-const CSS: &str = include_str!("github.css");
 
 /// Convert Markdown to HTML
 #[derive(Parser, Debug)]
@@ -67,22 +63,6 @@ fn slurp(path: &str) -> Result<String, Error> {
     }
 
     fs::read_to_string(path)
-}
-
-fn replace(template: &str, key: &str, value: &str) -> String {
-    let pattern = [r"\{\{\s*", key, r"\s*\}\}"].join("");
-    let re = Regex::new(&pattern).unwrap();
-    re.replace_all(template, value).to_string()
-}
-
-fn render(template: &str, values: &HashMap<&str, &str>) -> String {
-    let mut result = String::from(template);
-
-    for (key, value) in values {
-        result = replace(&result, key, value);
-    }
-
-    result
 }
 
 fn main() {
