@@ -50,6 +50,27 @@ When the `ql` [Vim plugin](https://github.com/pmeinhardt/ql) is loaded, previews
 Plug 'pmeinhardt/ql', {'do': ':QuickLookCompile'}
 ```
 
+## Using via WebAssembly
+
+To compile to WebAssembly, use [wasm-pack](https://rustwasm.github.io/docs/wasm-pack/introduction.html):
+
+```sh
+wasm-pack build <options> -- --features wasm
+```
+
+E.g. to build the web preview app, run:
+
+```sh
+wasm-pack build --target web -- --features wasm
+cd web && python3 -m http.server 3000
+```
+
+Then:
+
+```sh
+open "http://localhost:3000/?src=https://raw.githubusercontent.com/pmeinhardt/maxdown/main/README.md"
+```
+
 ## References
 
 - markdown-rs: https://github.com/wooorm/markdown-rs
