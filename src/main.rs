@@ -1,3 +1,5 @@
+use maxdown::*;
+
 use std::collections::HashMap;
 use std::fmt::Display;
 use std::fs::{self, read_to_string as read, write};
@@ -6,7 +8,6 @@ use std::io::{self, Error};
 use std::process;
 
 use clap::Parser;
-use markdown;
 use regex::Regex;
 
 const TEMPLATE: &str = include_str!("default-template.html");
@@ -66,19 +67,6 @@ fn slurp(path: &str) -> Result<String, Error> {
     }
 
     fs::read_to_string(path)
-}
-
-fn convert(input: &str, dangerous: bool) -> Result<String, String> {
-    let options = &markdown::Options {
-        compile: markdown::CompileOptions {
-            allow_dangerous_html: dangerous,
-            allow_dangerous_protocol: dangerous,
-            ..markdown::CompileOptions::gfm()
-        },
-        ..markdown::Options::gfm()
-    };
-
-    markdown::to_html_with_options(input, &options)
 }
 
 fn replace(template: &str, key: &str, value: &str) -> String {
