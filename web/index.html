@@ -10,8 +10,17 @@
 
       await init();
 
+      const params = new URLSearchParams(location.search);
+      const src = params.get("src");
+
+      const response = await fetch(src)
+
+      if (!response.ok) throw new Error(`failed to fetch ${src}`);
+
+      const input = await response.text();
+
       document.open();
-      document.write(md("**Hello World**", true));
+      document.write(md(input, true));
       document.close();
     </script>
   </body>
