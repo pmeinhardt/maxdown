@@ -10,7 +10,10 @@ edition = "2021"
 clap = { version = "4.1.4", features = ["derive"] }
 markdown = "1.0.0-alpha.7"
 regex = "1.7.1"
-wasm-bindgen = "0.2.84"
+wasm-bindgen = { version = "0.2.84", optional = true }
+
+[features]
+wasm = ["dep:wasm-bindgen"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]

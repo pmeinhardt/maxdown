@@ -2,7 +2,6 @@ use std::collections::HashMap;
 
 use markdown;
 use regex::Regex;
-use wasm_bindgen::prelude::*;
 
 pub const TEMPLATE: &str = include_str!("default-template.html");
 pub const CSS: &str = include_str!("github.css");
@@ -36,6 +35,10 @@ fn replace(template: &str, key: &str, value: &str) -> String {
     re.replace_all(template, value).to_string()
 }
 
+#[cfg(feature = "wasm")]
+use wasm_bindgen::prelude::*;
+
+#[cfg(feature = "wasm")]
 #[wasm_bindgen]
 pub fn md(input: &str, dangerous: bool) -> Result<String, String> {
     let html = convert(input, dangerous)?;
