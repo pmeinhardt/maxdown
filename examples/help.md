@@ -1,4 +1,4 @@
-# Test: help
+# Topic: help
 
 Print help when invoked without arguments:
 
