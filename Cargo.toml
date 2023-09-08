@@ -10,3 +10,6 @@ edition = "2021"
 clap = { version = "4.1.4", features = ["derive"] }
 markdown = "1.0.0-alpha.7"
 regex = "1.7.1"
+
+[dev-dependencies]
+trycmd = "0.14.17"
