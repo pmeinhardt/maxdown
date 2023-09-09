@@ -1,6 +1,6 @@
 # Topic: help
 
-Print help when invoked without arguments:
+Prints help when invoked without arguments:
 
 ```console
 $ maxdown
@@ -23,7 +23,7 @@ Options:
 
 ```
 
-Print help when invoked with `--help`:
+Prints help when invoked with `--help`:
 
 ```console
 $ maxdown --help
