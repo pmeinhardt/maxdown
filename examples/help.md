@@ -1,10 +1,10 @@
-# Topic: help
+# Help
 
-Prints help when invoked without arguments:
+Print help when invoked without arguments:
 
 ```console
 $ maxdown
-? 2
+? failed
 Convert Markdown to HTML
 
 Usage: maxdown [OPTIONS] <PATH>
@@ -23,10 +23,11 @@ Options:
 
 ```
 
-Prints help when invoked with `--help`:
+Print help when invoked with `--help`:
 
 ```console
 $ maxdown --help
+? success
 Convert Markdown to HTML
 
 Usage: maxdown [OPTIONS] <PATH>
