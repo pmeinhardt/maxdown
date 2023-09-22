@@ -46,13 +46,13 @@ $ maxdown --title "Pizzazz" examples/fixture.md
 Convert Markdown with custom base URL:
 
 ```console
-$ maxdown --base "https://github.com" examples/fixture.md
+$ maxdown --base "https://github.com/pmeinhardt/maxdown" examples/fixture.md
 ? success
 <!DOCTYPE html>
 <html>
   <head>
 ...
-    <base href="https://github.com">
+    <base href="https://github.com/pmeinhardt/maxdown">
 ...
   </head>
   <body class="markdown-body">
