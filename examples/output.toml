@@ -1,0 +1,2 @@
+bin.name = "maxdown"
+args = ["--output", "output.html", "input.md"]

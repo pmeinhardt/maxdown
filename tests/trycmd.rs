@@ -4,4 +4,5 @@ use trycmd::TestCases;
 fn trycmd() {
     let t = TestCases::new();
     t.case("examples/*.md");
+    t.case("examples/*.toml");
 }
