@@ -3,7 +3,7 @@
 Convert Markdown:
 
 ```console
-$ maxdown examples/fixture.md
+$ maxdown input.md
 ? success
 <!DOCTYPE html>
 <html>
@@ -25,7 +25,7 @@ $ maxdown examples/fixture.md
 Convert Markdown with custom document title:
 
 ```console
-$ maxdown --title "Pizzazz" examples/fixture.md
+$ maxdown --title "Pizzazz" input.md
 ? success
 <!DOCTYPE html>
 <html>
@@ -46,7 +46,7 @@ $ maxdown --title "Pizzazz" examples/fixture.md
 Convert Markdown with custom base URL:
 
 ```console
-$ maxdown --base "https://github.com/pmeinhardt/maxdown" examples/fixture.md
+$ maxdown --base "https://github.com/pmeinhardt/maxdown" input.md
 ? success
 <!DOCTYPE html>
 <html>
@@ -67,7 +67,7 @@ $ maxdown --base "https://github.com/pmeinhardt/maxdown" examples/fixture.md
 Convert Markdown with custom template:
 
 ```console
-$ maxdown --template examples/template.html examples/fixture.md
+$ maxdown --template template.html input.md
 ? success
 <!DOCTYPE html>
 <html>
