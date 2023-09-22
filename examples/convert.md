@@ -63,3 +63,18 @@ $ maxdown --base "https://github.com" examples/fixture.md
 
 
 ```
+
+Convert Markdown with custom template:
+
+```console
+$ maxdown --template examples/template.html examples/fixture.md
+? success
+<!DOCTYPE html>
+<html>
+  <head><title>Fancy Template</title></head>
+  <body><p>Hello <strong>Markdown</strong>!</p>
+</body>
+</html>
+
+
+```
