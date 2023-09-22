@@ -7,9 +7,9 @@ edition = "2021"
 # https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.1.4", features = ["derive"] }
-markdown = "1.0.0-alpha.7"
-regex = "1.7.1"
+clap = { version = "4.4.4", features = ["derive"] }
+markdown = "1.0.0-alpha.14"
+regex = "1.9.5"
 
 [dev-dependencies]
 trycmd = "0.14.17"
