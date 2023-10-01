@@ -7,7 +7,6 @@ use std::process;
 
 use clap::Parser;
 use markdown;
-use regex::Regex;
 
 const TEMPLATE: &str = include_str!("default-template.html");
 const CSS: &str = include_str!("github.css");
@@ -81,17 +80,12 @@ fn convert(input: &str, dangerous: bool) -> Result<String, String> {
     markdown::to_html_with_options(input, &options)
 }
 
-fn replace(template: &str, key: &str, value: &str) -> String {
-    let pattern = [r"\{\{\s*", key, r"\s*\}\}"].join("");
-    let re = Regex::new(&pattern).unwrap();
-    re.replace_all(template, value).to_string()
-}
-
 fn render(template: &str, values: &HashMap<&str, &str>) -> String {
     let mut result = String::from(template);
 
     for (key, value) in values {
-        result = replace(&result, key, value);
+        let pattern = format!("{{{{ {key} }}}}");
+        result = result.replace(&pattern, value)
     }
 
     result
