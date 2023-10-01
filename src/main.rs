@@ -1,9 +1,7 @@
+use anyhow::{anyhow, Context, Result};
 use std::collections::HashMap;
-use std::fmt::Display;
 use std::fs::{self, read_to_string as read, write};
-use std::io::prelude::*;
-use std::io::{self, Error};
-use std::process;
+use std::io;
 
 use clap::Parser;
 use markdown;
@@ -40,26 +38,7 @@ struct Args {
     title: String,
 }
 
-trait UnwrapOrBail<T, E: Display> {
-    fn unwrap_or_bail(self, message: &str) -> T;
-}
-
-impl<T, E: Display> UnwrapOrBail<T, E> for Result<T, E> {
-    fn unwrap_or_bail(self, message: &str) -> T {
-        self.unwrap_or_else(|error| bail(message, &error))
-    }
-}
-
-fn bail<E: Display>(message: &str, error: &E) -> ! {
-    eprintln!("{message}: {error}");
-
-    let _ = io::stdout().lock().flush();
-    let _ = io::stderr().lock().flush();
-
-    process::exit(1)
-}
-
-fn slurp(path: &str) -> Result<String, Error> {
+fn slurp(path: &str) -> Result<String, io::Error> {
     if path == "-" {
         return io::read_to_string(io::stdin());
     }
@@ -91,11 +70,13 @@ fn render(template: &str, values: &HashMap<&str, &str>) -> String {
     result
 }
 
-fn main() {
+fn main() -> Result<()> {
     let args = Args::parse();
 
-    let input = slurp(&args.path).unwrap_or_bail("Failed to read input");
-    let html = convert(&input, args.dangerous).unwrap();
+    let input =
+        slurp(&args.path).with_context(|| format!("Failed to read input from {}", args.path))?;
+
+    let html = convert(&input, args.dangerous).map_err(|m| anyhow!(m))?;
     let base = args.base.unwrap_or(String::from(""));
 
     let values = HashMap::from([
@@ -106,14 +87,20 @@ fn main() {
     ]);
 
     let template = match args.template {
-        Some(path) => read(&path).unwrap_or_bail("Failed to read template"),
+        Some(path) => {
+            read(&path).with_context(|| format!("Failed to read template from {path}"))?
+        }
         None => String::from(TEMPLATE),
     };
 
     let result = render(&template, &values);
 
     match args.output {
-        Some(path) => write(path, result).unwrap_or_bail("Failed to write output"),
+        Some(path) => {
+            write(&path, result).with_context(|| format!("Failed to write output to {path}"))?
+        }
         None => println!("{}", result),
     }
+
+    Ok(())
 }
