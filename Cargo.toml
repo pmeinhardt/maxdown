@@ -9,7 +9,6 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.4.4", features = ["derive"] }
 markdown = "1.0.0-alpha.14"
-regex = "1.9.5"
 
 [dev-dependencies]
 trycmd = "0.14.17"
