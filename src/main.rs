@@ -107,7 +107,7 @@ fn main() {
     let values = HashMap::from([
         ("base", &*base),
         ("css", &*CSS),
-        ("result", &*html),
+        ("result", html.trim()),
         ("title", &*args.title),
     ]);
 
