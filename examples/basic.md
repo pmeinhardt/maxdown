@@ -15,7 +15,6 @@ $ maxdown input.md
   </head>
   <body class="markdown-body">
     <p>Hello <strong>Markdown</strong>!</p>
-
   </body>
 </html>
 
@@ -36,7 +35,6 @@ $ maxdown --title "Pizzazz" input.md
   </head>
   <body class="markdown-body">
     <p>Hello <strong>Markdown</strong>!</p>
-
   </body>
 </html>
 
@@ -57,7 +55,6 @@ $ maxdown --base "https://github.com/pmeinhardt/maxdown" input.md
   </head>
   <body class="markdown-body">
     <p>Hello <strong>Markdown</strong>!</p>
-
   </body>
 </html>
 
@@ -72,8 +69,7 @@ $ maxdown --template template.html input.md
 <!DOCTYPE html>
 <html>
   <head><title>Fancy Template</title></head>
-  <body><p>Hello <strong>Markdown</strong>!</p>
-</body>
+  <body><p>Hello <strong>Markdown</strong>!</p></body>
 </html>
 
 
