@@ -8,17 +8,17 @@ let s:profile = 'release'
 let s:path = fnamemodify(fnamemodify(resolve(expand('<sfile>:p')), ':h'), ':h')
 let s:cmd = s:path . '/target/' . s:profile . '/maxdown'
 
- function! s:exec(cmd, ...)
-   if a:0 > 0
-     let output = system(a:cmd, a:1)
-   else
-     let output = system(a:cmd)
-   endif
+function! s:exec(cmd, ...)
+  if a:0 > 0
+    let output = system(a:cmd, a:1)
+  else
+    let output = system(a:cmd)
+  endif
 
-   if v:shell_error != 0
-     throw output
-   endif
- endfunction
+  if v:shell_error != 0
+    throw output
+  endif
+endfunction
 
 function! s:compile() abort
   call s:exec('cd ' . s:path . ' && cargo build --release --locked')
