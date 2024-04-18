@@ -24,7 +24,11 @@ function! s:compile() abort
   call s:exec('cd ' . s:path . ' && cargo build --release --locked')
 endfunction
 
-function! s:convert(dest, source, bnum) abort
+function! s:convert() abort
+  execute '%!' . s:cmd . ' -'
+endfunction
+
+function! s:invoke(dest, source, bnum) abort
   let l:cmd = s:cmd
 
   let args = [
@@ -58,12 +62,14 @@ endfunction
 function! s:preview() abort
   let source = expand('%:p')
   let dest = expand('~/.maxdown.preview.html')
-  call s:convert(dest, source, bufnr('%'))
+  call s:invoke(dest, source, bufnr('%'))
   call s:show(dest, expand('%:t'))
 endfunction
 
 nnoremap <silent> <Plug>MaxdownCompile :call <SID>compile()<CR>
+nnoremap <silent> <Plug>MaxdownConvert :call <SID>convert()<CR>
 nnoremap <silent> <Plug>MaxdownPreview :call <SID>preview()<CR>
 
 command! MaxdownCompile call s:compile()
+command! MaxdownConvert call s:convert()
 command! MaxdownPreview call s:preview()
