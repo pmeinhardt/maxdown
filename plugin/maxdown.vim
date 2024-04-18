@@ -25,24 +25,36 @@ function! s:compile() abort
 endfunction
 
 function! s:convert() abort
-  execute '%!' . s:cmd . ' -'
+  let cmd = s:cmd
+
+  let args = [
+        \ '--template', shellescape(s:path . '/src/minimal-template.html'),
+        \ '--title', shellescape(expand('%:t')),
+        \ '-',
+        \ ]
+
+  for arg in args
+    let cmd .= ' ' . arg
+  endfor
+
+  execute '%!' . cmd
 endfunction
 
 function! s:invoke(dest, source, bnum) abort
-  let l:cmd = s:cmd
+  let cmd = s:cmd
 
   let args = [
         \ '--dangerous',
-        \ '--base ' . shellescape(a:source),
-        \ '--output ' . shellescape(a:dest),
+        \ '--base', shellescape(a:source),
+        \ '--output', shellescape(a:dest),
         \ '-'
         \ ]
 
   for arg in args
-    let l:cmd .= ' ' . arg
+    let cmd .= ' ' . arg
   endfor
 
-  call s:exec(l:cmd, a:bnum)
+  call s:exec(cmd, a:bnum)
 endfunction
 
 function! s:show(fpath, title) abort
