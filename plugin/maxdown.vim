@@ -34,11 +34,7 @@ function! s:convert() abort
         \ '-',
         \ ]
 
-  for arg in args
-    let cmd .= ' ' . arg
-  endfor
-
-  execute '%!' . cmd
+  execute '%!' . join([cmd] + args)
 endfunction
 
 function! s:invoke(dest, source, bnum) abort
@@ -51,11 +47,7 @@ function! s:invoke(dest, source, bnum) abort
         \ '-'
         \ ]
 
-  for arg in args
-    let cmd .= ' ' . arg
-  endfor
-
-  call s:exec(cmd, a:bnum)
+  call s:exec(join([cmd] + args), a:bnum)
 endfunction
 
 function! s:show(fpath, title) abort
