@@ -28,6 +28,7 @@ function! s:convert() abort
   let cmd = s:cmd
 
   let args = [
+        \ '--dangerous',
         \ '--template', shellescape(s:path . '/src/minimal-template.html'),
         \ '--title', shellescape(expand('%:t')),
         \ '-',
