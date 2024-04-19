@@ -68,6 +68,7 @@ function! s:preview() abort
   let source = expand('%:p')
   let dest = expand('~/.maxdown.preview.html')
   call s:invoke(dest, source, bufnr('%'))
+  call setfperm(dest, 'rw-------')
   call s:show(dest, expand('%:t'))
 endfunction
 
