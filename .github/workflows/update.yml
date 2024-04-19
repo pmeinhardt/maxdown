@@ -14,15 +14,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Update CSS
-        run: script/update-css
+      - name: Update preview template
+        run: script/update-preview-template
       - name: Create or update pull-request
         id: create-pull-request
         uses: peter-evans/create-pull-request@v4
         with:
-          title: Update CSS 💅
+          title: Update preview template 💅
           body: https://github.com/sindresorhus/github-markdown-css
-          commit-message: Update CSS 💅
+          commit-message: Update preview template 💅
           delete-branch: true
           labels: automated pull-request
       - name: Print pull-request details

@@ -8,12 +8,11 @@ $ maxdown input.md
 <!DOCTYPE html>
 <html>
   <head>
-...
+    <meta charset="utf-8">
     <title>Preview</title>
     <base href="">
-...
   </head>
-  <body class="markdown-body">
+  <body>
     <p>Hello <strong>Markdown</strong>!</p>
   </body>
 </html>
@@ -33,7 +32,7 @@ $ maxdown --title "Pizzazz" input.md
     <title>Pizzazz</title>
 ...
   </head>
-  <body class="markdown-body">
+  <body>
     <p>Hello <strong>Markdown</strong>!</p>
   </body>
 </html>
@@ -53,7 +52,7 @@ $ maxdown --base "https://github.com/pmeinhardt/maxdown" input.md
     <base href="https://github.com/pmeinhardt/maxdown">
 ...
   </head>
-  <body class="markdown-body">
+  <body>
     <p>Hello <strong>Markdown</strong>!</p>
   </body>
 </html>
