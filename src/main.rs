@@ -7,7 +7,6 @@ use clap::Parser;
 use markdown;
 
 const TEMPLATE: &str = include_str!("default-template.html");
-const CSS: &str = include_str!("github.css");
 
 /// Convert Markdown to HTML
 #[derive(Parser, Debug)]
@@ -82,7 +81,6 @@ fn main() -> Result<()> {
     let values = HashMap::from([
         ("base", &*base),
         ("content", html.trim()),
-        ("default-css", CSS),
         ("title", &*args.title),
     ]);
 

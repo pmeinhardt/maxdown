@@ -29,7 +29,6 @@ function! s:convert() abort
 
   let args = [
         \ '--dangerous',
-        \ '--template', shellescape(s:path . '/src/minimal-template.html'),
         \ '--title', shellescape(expand('%:t')),
         \ '-',
         \ ]
@@ -44,6 +43,7 @@ function! s:invoke(dest, source, bnum) abort
         \ '--dangerous',
         \ '--base', shellescape(a:source),
         \ '--output', shellescape(a:dest),
+        \ '--template', shellescape(s:path . '/src/preview-template.html'),
         \ '-'
         \ ]
 

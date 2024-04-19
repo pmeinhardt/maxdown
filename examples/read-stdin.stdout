@@ -3,7 +3,7 @@
   <head>
 ...
   </head>
-  <body class="markdown-body">
+  <body>
     <p>Hello I/O!</p>
   </body>
 </html>

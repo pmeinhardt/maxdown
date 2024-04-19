@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+cd "$(dirname "$0")/.."
+
+TEMPLATE="src/preview-template-template.html"
+OUTPUT="src/preview-template.html"
+
+CSS="$(script/get-github-markdown-css | sed '2,$s/^/      /' | sed 's/ *$//')"
+export CSS
+
+# shellcheck disable=SC2016
+envsubst '${CSS}' < "$TEMPLATE" > "$OUTPUT"

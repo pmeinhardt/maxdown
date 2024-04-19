@@ -4,8 +4,15 @@
     <meta charset="utf-8">
     <title>{{ title }}</title>
     <base href="{{ base }}">
+    <style>
+      .markdown-body {
+        padding: 2rem;
+      }
+
+      ${CSS}
+    </style>
   </head>
-  <body>
+  <body class="markdown-body">
     {{ content }}
   </body>
 </html>
