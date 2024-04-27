@@ -1,4 +1,5 @@
 use anyhow::{anyhow, Context, Result};
+use markdown::message::Message;
 use std::collections::HashMap;
 use std::fs::{self, read_to_string as read, write};
 use std::io;
@@ -45,7 +46,7 @@ fn slurp(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
 }
 
-fn convert(input: &str, dangerous: bool) -> Result<String, String> {
+fn convert(input: &str, dangerous: bool) -> Result<String, Message> {
     let options = &markdown::Options {
         compile: markdown::CompileOptions {
             allow_dangerous_html: dangerous,
