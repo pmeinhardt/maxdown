@@ -9,7 +9,7 @@ edition = "2021"
 [dependencies]
 anyhow = { version = "1.0.81", features = ["std"] }
 clap = { version = "4.5.3", features = ["derive"] }
-markdown = "1.0.0-alpha.16"
+markdown = "1.0.0-alpha.17"
 
 [dev-dependencies]
 trycmd = "0.15.0"
