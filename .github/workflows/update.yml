@@ -23,6 +23,7 @@ jobs:
           title: Update preview template 💅
           body: https://github.com/sindresorhus/github-markdown-css
           commit-message: Update preview template 💅
+          branch: actions/update-preview-template
           delete-branch: true
           labels: automated pull-request
       - name: Print pull-request details
