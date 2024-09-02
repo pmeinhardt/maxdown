@@ -60,12 +60,12 @@ fn convert(input: &str, dangerous: bool) -> Result<String, Message> {
 }
 
 fn render(template: &str, values: &HashMap<&str, &str>) -> String {
-    return values
+    values
         .iter()
         .fold(String::from(template), |result, (key, value)| {
             let pattern = format!("{{{{ {key} }}}}");
             result.replace(&pattern, value)
-        });
+        })
 }
 
 fn main() -> Result<()> {
