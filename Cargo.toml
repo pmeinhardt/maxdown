@@ -12,4 +12,4 @@ clap = { version = "4.5.27", features = ["derive"] }
 markdown = "1.0.0-alpha.22"
 
 [dev-dependencies]
-trycmd = "0.15.8"
+trycmd = "0.15.9"
