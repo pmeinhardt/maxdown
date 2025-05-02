@@ -24,6 +24,20 @@ cargo build --release --locked
 
 Then, just put the resulting `target/release/maxdown` binary somewhere on your `PATH`.
 
+### Command-line tool via Homebrew
+
+Alternatively, you can install `maxdown`, built from source, via Homebrew:
+
+```shell
+brew install --HEAD pmeinhardt/tools/maxdown
+```
+
+To update, use:
+
+```shell
+brew upgrade --fetch-HEAD pmeinhardt/tools/maxdown
+```
+
 ### Vim plugin
 
 For the Vim plugin, if you use [vim-plug](https://github.com/junegunn/vim-plug), add this line to your Vim configuration file:
