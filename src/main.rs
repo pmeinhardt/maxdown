@@ -3,6 +3,7 @@ use markdown::message::Message;
 use std::collections::HashMap;
 use std::fs::{self, read_to_string as read, write};
 use std::io;
+use std::path::{Path, PathBuf};
 
 use clap::Parser;
 use markdown;
@@ -15,7 +16,7 @@ const TEMPLATE: &str = include_str!("default-template.html");
 #[command(version)]
 struct Args {
     /// Path to the input markdown file or "-" for stdin
-    path: String,
+    path: PathBuf,
 
     /// Base URL to use for all relative URLs in the document
     #[arg(short, long, value_name = "url")]
@@ -27,19 +28,19 @@ struct Args {
 
     /// File to write output to [default: stdout]
     #[arg(short, long, value_name = "path")]
-    output: Option<String>,
+    output: Option<PathBuf>,
 
     /// Template to use for output
     #[arg(short, long, value_name = "path")]
-    template: Option<String>,
+    template: Option<PathBuf>,
 
     /// Title to pass to the template
     #[arg(long, value_name = "title", default_value = "Preview")]
     title: String,
 }
 
-fn slurp(path: &str) -> Result<String, io::Error> {
-    if path == "-" {
+fn slurp(path: &Path) -> Result<String, io::Error> {
+    if path == Path::new("-") {
         return io::read_to_string(io::stdin());
     }
 
@@ -72,7 +73,7 @@ fn main() -> Result<()> {
     let args = Args::parse();
 
     let input =
-        slurp(&args.path).with_context(|| format!("Failed to read input from {}", args.path))?;
+        slurp(&args.path).with_context(|| format!("Failed to read input from {:?}", args.path))?;
 
     let html = convert(&input, args.dangerous).map_err(|m| anyhow!(m))?;
     let base = args.base.unwrap_or(String::from(""));
@@ -85,7 +86,7 @@ fn main() -> Result<()> {
 
     let template = match args.template {
         Some(path) => {
-            read(&path).with_context(|| format!("Failed to read template from {path}"))?
+            read(&path).with_context(|| format!("Failed to read template from {:?}", path))?
         }
         None => String::from(TEMPLATE),
     };
@@ -94,7 +95,7 @@ fn main() -> Result<()> {
 
     match args.output {
         Some(path) => {
-            write(&path, result).with_context(|| format!("Failed to write output to {path}"))?
+            write(&path, result).with_context(|| format!("Failed to write output to {:?}", path))?
         }
         None => println!("{}", result),
     }
