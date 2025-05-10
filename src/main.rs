@@ -61,12 +61,38 @@ fn convert(input: &str, dangerous: bool) -> Result<String, Message> {
 }
 
 fn render(template: &str, values: &HashMap<&str, &str>) -> String {
-    values
-        .iter()
-        .fold(String::from(template), |result, (key, value)| {
-            let pattern = format!("{{{{ {key} }}}}");
-            result.replace(&pattern, value)
-        })
+    let mut result = String::new();
+    let mut start = 0;
+
+    while let Some(open) = template[start..].find("{{") {
+        let open = start + open;
+        if let Some(close) = template[open..].find("}}") {
+            let close = open + close + 2;
+
+            // Add everything before the placeholder
+            result.push_str(&template[start..open]);
+
+            // Extract the placeholder key and trim whitespace
+            let key = &template[open + 2..close - 2].trim();
+            if let Some(value) = values.get(key) {
+                // Replace placeholder with value
+                result.push_str(value);
+            } else {
+                // Keep the placeholder if no value is found
+                result.push_str(&template[open..close]);
+            }
+
+            // Move the start pointer past the current placeholder
+            start = close;
+        } else {
+            // No closing braces found; break the loop
+            break;
+        }
+    }
+
+    // Add the remaining part of the template
+    result.push_str(&template[start..]);
+    result
 }
 
 fn main() -> Result<()> {
