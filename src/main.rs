@@ -76,19 +76,18 @@ fn main() -> Result<()> {
         slurp(&args.path).with_context(|| format!("Failed to read input from {:?}", args.path))?;
 
     let html = convert(&input, args.dangerous).map_err(|m| anyhow!(m))?;
-    let base = args.base.unwrap_or(String::from(""));
 
     let values = HashMap::from([
-        ("base", &*base),
+        ("base", args.base.as_deref().unwrap_or("")),
+        ("title", args.title.as_ref()),
         ("content", html.trim()),
-        ("title", &*args.title),
     ]);
 
     let template = match args.template {
         Some(path) => {
             read(&path).with_context(|| format!("Failed to read template from {:?}", path))?
         }
-        None => String::from(TEMPLATE),
+        None => TEMPLATE.to_string(),
     };
 
     let result = render(&template, &values);
