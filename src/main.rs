@@ -8,6 +8,7 @@ use std::path::{Path, PathBuf};
 use clap::Parser;
 use markdown;
 
+// The default HTML template embedded in the binary as a string
 const TEMPLATE: &str = include_str!("default-template.html");
 
 /// Convert Markdown to HTML
@@ -39,6 +40,7 @@ struct Args {
     title: String,
 }
 
+/// Reads content from a file or stdin if the path is "-"
 fn read(path: &Path) -> Result<String, io::Error> {
     if path == Path::new("-") {
         return io::read_to_string(io::stdin());
@@ -47,12 +49,13 @@ fn read(path: &Path) -> Result<String, io::Error> {
     fs::read_to_string(path)
 }
 
+/// Converts Markdown input to HTML using the `markdown` crate
 fn convert(input: &str, dangerous: bool) -> Result<String, Message> {
     let options = &markdown::Options {
         compile: markdown::CompileOptions {
-            allow_dangerous_html: dangerous,
-            allow_dangerous_protocol: dangerous,
-            ..markdown::CompileOptions::gfm()
+            allow_dangerous_html: dangerous,     // allow potentially unsafe HTML
+            allow_dangerous_protocol: dangerous, // allow unsafe protocols (e.g., `javascript:`)
+            ..markdown::CompileOptions::gfm()    // use GitHub Flavored Markdown defaults
         },
         ..markdown::Options::gfm()
     };
@@ -60,6 +63,7 @@ fn convert(input: &str, dangerous: bool) -> Result<String, Message> {
     markdown::to_html_with_options(input, &options)
 }
 
+/// Replaces placeholders in the template with the provided values
 fn render(template: &str, values: &HashMap<&str, &str>) -> String {
     let mut result = String::new();
     let mut start = 0;
@@ -95,20 +99,26 @@ fn render(template: &str, values: &HashMap<&str, &str>) -> String {
     result
 }
 
+/// Main function to handle command-line arguments and orchestrate the Markdown-to-HTML conversion
 fn main() -> Result<()> {
+    // Parse command-line arguments
     let args = Args::parse();
 
+    // Read the Markdown input from a file or stdin
     let input =
         read(&args.path).with_context(|| format!("Failed to read input from {:?}", args.path))?;
 
+    // Convert the Markdown input to HTML
     let html = convert(&input, args.dangerous).map_err(|m| anyhow!(m))?;
 
+    // Prepare values for template rendering
     let values = HashMap::from([
         ("base", args.base.as_deref().unwrap_or("")),
         ("title", args.title.as_ref()),
         ("content", html.trim()),
     ]);
 
+    // Read the custom template if provided, or use the default template
     let template = match args.template {
         Some(path) => {
             read(&path).with_context(|| format!("Failed to read template from {:?}", path))?
@@ -116,8 +126,10 @@ fn main() -> Result<()> {
         None => TEMPLATE.to_string(),
     };
 
+    // Render the final HTML by replacing placeholders in the template
     let result = render(&template, &values);
 
+    // Write the output to a file or stdout
     match args.output {
         Some(path) => {
             write(&path, result).with_context(|| format!("Failed to write output to {:?}", path))?
