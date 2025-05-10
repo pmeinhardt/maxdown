@@ -1,7 +1,7 @@
 use anyhow::{anyhow, Context, Result};
 use markdown::message::Message;
 use std::collections::HashMap;
-use std::fs::{self, read_to_string as read, write};
+use std::fs::{self, write};
 use std::io;
 use std::path::{Path, PathBuf};
 
@@ -39,7 +39,7 @@ struct Args {
     title: String,
 }
 
-fn slurp(path: &Path) -> Result<String, io::Error> {
+fn read(path: &Path) -> Result<String, io::Error> {
     if path == Path::new("-") {
         return io::read_to_string(io::stdin());
     }
@@ -73,7 +73,7 @@ fn main() -> Result<()> {
     let args = Args::parse();
 
     let input =
-        slurp(&args.path).with_context(|| format!("Failed to read input from {:?}", args.path))?;
+        read(&args.path).with_context(|| format!("Failed to read input from {:?}", args.path))?;
 
     let html = convert(&input, args.dangerous).map_err(|m| anyhow!(m))?;
 
