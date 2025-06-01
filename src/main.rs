@@ -1,15 +1,18 @@
-use anyhow::{anyhow, Context, Result};
-use markdown::message::Message;
 use std::collections::HashMap;
 use std::fs::{self, write};
 use std::io;
 use std::path::{Path, PathBuf};
 
+use anyhow::{anyhow, Context, Result};
 use clap::Parser;
 use markdown;
+use markdown::message::Message;
+
+mod template;
+use template::Template;
 
 // The default HTML template embedded in the binary as a string
-const TEMPLATE: &str = include_str!("../templates/default-template.html");
+const DEFAULT_TEMPLATE: &str = include_str!("../templates/default-template.html");
 
 /// Convert Markdown to HTML
 #[derive(Parser, Debug)]
@@ -63,42 +66,6 @@ fn convert(input: &str, dangerous: bool) -> Result<String, Message> {
     markdown::to_html_with_options(input, &options)
 }
 
-/// Replaces placeholders in the template with the provided values
-fn render(template: &str, values: &HashMap<&str, &str>) -> String {
-    let mut result = String::new();
-    let mut start = 0;
-
-    while let Some(open) = template[start..].find("{{") {
-        let open = start + open;
-        if let Some(close) = template[open..].find("}}") {
-            let close = open + close + 2;
-
-            // Add everything before the placeholder
-            result.push_str(&template[start..open]);
-
-            // Extract the placeholder key and trim whitespace
-            let key = &template[open + 2..close - 2].trim();
-            if let Some(value) = values.get(key) {
-                // Replace placeholder with value
-                result.push_str(value);
-            } else {
-                // Keep the placeholder if no value is found
-                result.push_str(&template[open..close]);
-            }
-
-            // Move the start pointer past the current placeholder
-            start = close;
-        } else {
-            // No closing braces found; break the loop
-            break;
-        }
-    }
-
-    // Add the remaining part of the template
-    result.push_str(&template[start..]);
-    result
-}
-
 /// Main function to handle command-line arguments and orchestrate the Markdown-to-HTML conversion
 fn main() -> Result<()> {
     // Parse command-line arguments
@@ -112,29 +79,32 @@ fn main() -> Result<()> {
     let html = convert(&input, args.dangerous).map_err(|m| anyhow!(m))?;
 
     // Prepare values for template rendering
-    let values = HashMap::from([
-        ("base", args.base.as_deref().unwrap_or("")),
-        ("title", args.title.as_ref()),
-        ("content", html.trim()),
+    let values: HashMap<String, String> = HashMap::from([
+        ("base".to_string(), args.base.unwrap_or_default()),
+        ("title".to_string(), args.title),
+        ("content".to_string(), html.trim().to_string()),
     ]);
 
     // Read the custom template if provided, or use the default template
-    let template = match args.template {
-        Some(path) => {
-            read(&path).with_context(|| format!("Failed to read template from {:?}", path))?
-        }
-        None => TEMPLATE.to_string(),
+    let template: Template = match args.template {
+        Some(path) => read(&path)
+            .with_context(|| format!("Failed to read template from {:?}", path))?
+            .into(),
+        None => DEFAULT_TEMPLATE.into(),
     };
 
     // Render the final HTML by replacing placeholders in the template
-    let result = render(&template, &values);
+    let result = template.render(&values);
 
     // Write the output to a file or stdout
+    // Use match expression to handle the output path
     match args.output {
         Some(path) => {
             write(&path, result).with_context(|| format!("Failed to write output to {:?}", path))?
         }
-        None => println!("{}", result),
+        None => {
+            println!("{}", result)
+        }
     }
 
     Ok(())
