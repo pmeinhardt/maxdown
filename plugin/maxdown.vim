@@ -7,6 +7,7 @@ let s:profile = 'release'
 
 let s:path = fnamemodify(fnamemodify(resolve(expand('<sfile>:p')), ':h'), ':h')
 let s:cmd = s:path . '/target/' . s:profile . '/maxdown'
+let s:template = s:path . '/templates/preview-template.html'
 
 function! s:exec(cmd, ...)
   if a:0 > 0
@@ -43,7 +44,7 @@ function! s:invoke(dest, source, bnum) abort
         \ '--dangerous',
         \ '--base', shellescape(a:source),
         \ '--output', shellescape(a:dest),
-        \ '--template', shellescape(s:path . '/src/preview-template.html'),
+        \ '--template', shellescape(s:template),
         \ '-'
         \ ]
 
