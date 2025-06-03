@@ -9,7 +9,7 @@ use clap::Parser;
 use markdown;
 
 // The default HTML template embedded in the binary as a string
-const TEMPLATE: &str = include_str!("default-template.html");
+const TEMPLATE: &str = include_str!("../templates/default-template.html");
 
 /// Convert Markdown to HTML
 #[derive(Parser, Debug)]
