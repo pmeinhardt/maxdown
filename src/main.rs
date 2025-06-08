@@ -16,7 +16,7 @@ const DEFAULT_TEMPLATE: &str = include_str!("../templates/default-template.html"
 #[command(arg_required_else_help(true))]
 #[command(version)]
 struct Args {
-    /// Path to the input markdown file or "-" for stdin
+    /// Path to the input Markdown file or "-" for stdin
     path: PathBuf,
 
     /// Base URL to use for all relative URLs in the document

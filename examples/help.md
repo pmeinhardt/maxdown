@@ -10,7 +10,7 @@ Convert Markdown to HTML
 Usage: maxdown [OPTIONS] <PATH>
 
 Arguments:
-  <PATH>  Path to the input markdown file or "-" for stdin
+  <PATH>  Path to the input Markdown file or "-" for stdin
 
 Options:
   -b, --base <url>       Base URL to use for all relative URLs in the document
@@ -33,7 +33,7 @@ Convert Markdown to HTML
 Usage: maxdown [OPTIONS] <PATH>
 
 Arguments:
-  <PATH>  Path to the input markdown file or "-" for stdin
+  <PATH>  Path to the input Markdown file or "-" for stdin
 
 Options:
   -b, --base <url>       Base URL to use for all relative URLs in the document
