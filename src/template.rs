@@ -13,7 +13,7 @@ enum Instruction {
 }
 
 /// Represents a simple string template with placeholders
-pub struct Template {
+struct Template {
     program: Vec<Instruction>,
     source: String,
 }
@@ -95,6 +95,12 @@ impl From<&str> for Template {
     fn from(source: &str) -> Self {
         Template::new(source.to_string())
     }
+}
+
+/// Renders a template with the provided values and returns the result as a string
+pub fn render(template: &str, values: &HashMap<String, String>) -> String {
+    let template = Template::from(template);
+    template.render(values)
 }
 
 #[cfg(test)]
