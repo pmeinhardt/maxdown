@@ -24,12 +24,12 @@ Caused by:
 
 ```
 
-Print error when output file cannot be written:
+Print error when output file cannot be opened:
 
 ```console
 $ maxdown --output enoent/output.html input.md
 ? failed
-Error: Failed to write output to "enoent/output.html"
+Error: Failed to open output file "enoent/output.html"
 
 Caused by:
     No such file or directory (os error 2)

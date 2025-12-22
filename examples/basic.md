@@ -17,7 +17,6 @@ $ maxdown input.md
   </body>
 </html>
 
-
 ```
 
 Convert Markdown with custom document title:
@@ -36,7 +35,6 @@ $ maxdown --title "Pizzazz" input.md
     <p>Hello <strong>Markdown</strong>!</p>
   </body>
 </html>
-
 
 ```
 
@@ -57,7 +55,6 @@ $ maxdown --base "https://github.com/pmeinhardt/maxdown" input.md
   </body>
 </html>
 
-
 ```
 
 Convert Markdown with custom template:
@@ -70,6 +67,5 @@ $ maxdown --template template.html input.md
   <head><title>Fancy Template</title></head>
   <body><p>Hello <strong>Markdown</strong>!</p></body>
 </html>
-
 
 ```

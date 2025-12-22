@@ -31,7 +31,6 @@ function! s:convert() abort
   let args = [
         \ '--dangerous',
         \ '--title', shellescape(expand('%:t')),
-        \ '-',
         \ ]
 
   execute '%!' . join([cmd] + args)
@@ -45,7 +44,6 @@ function! s:invoke(dest, source, bnum) abort
         \ '--base', shellescape(a:source),
         \ '--output', shellescape(a:dest),
         \ '--template', shellescape(s:template),
-        \ '-'
         \ ]
 
   call s:exec(join([cmd] + args), a:bnum)
