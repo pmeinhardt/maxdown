@@ -1,13 +1,12 @@
-use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io::{self, BufWriter, Write};
 use std::path::PathBuf;
 
 use anyhow::{anyhow, Context, Result};
 use clap::Parser;
+use minijinja::{context, Environment};
 
 mod markdown;
-mod template;
 
 /// The default HTML template embedded into the binary as a string.
 const DEFAULT_TEMPLATE: &str = include_str!("../templates/default-template.html");
@@ -62,15 +61,19 @@ fn main() -> Result<()> {
         None => DEFAULT_TEMPLATE.to_string(),
     };
 
-    // Prepare values for template rendering
-    let values: HashMap<String, String> = HashMap::from([
-        ("base".to_string(), args.base.unwrap_or_default()),
-        ("title".to_string(), args.title),
-        ("content".to_string(), content.trim().to_string()),
-    ]);
+    // Generate the final HTML output by rendering the template.
+    let mut env = Environment::empty();
+    env.set_keep_trailing_newline(true);
 
-    // Render the final HTML by replacing placeholders in the template
-    let result = template::render(&template, &values);
+    let ctx = context! {
+        base => args.base.unwrap_or_default(),
+        content => content.trim(),
+        title => args.title,
+    };
+
+    let result = env
+        .render_str(&template, ctx)
+        .context("Failed to render template")?;
 
     // Direct output to a file, if a path was provided, or to stdout otherwise.
     let mut out: Box<dyn Write> = match args.output {
