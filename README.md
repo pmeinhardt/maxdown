@@ -67,7 +67,7 @@ The `maxdown` command-line tool reads Markdown from `stdin` or a file and output
 For instance:
 
 ```sh
-echo 'Hello *World*!' | maxdown -
+echo 'Hello *World*!' | maxdown
 maxdown README.md
 ```
 
@@ -77,16 +77,16 @@ To learn about the extra knobs and switches, kindly ask `maxdown` for help:
 $ maxdown --help
 Convert Markdown to HTML
 
-Usage: maxdown [OPTIONS] <PATH>
+Usage: maxdown [OPTIONS] [PATH]
 
 Arguments:
-  <PATH>  Path to the input markdown file or "-" for stdin
+  [PATH]  Path to the input Markdown file [default: stdin]
 
 Options:
   -b, --base <url>       Base URL to use for all relative URLs in the document
       --dangerous        Only use this if you trust the authors of the document
   -o, --output <path>    File to write output to [default: stdout]
-  -t, --template <path>  Template to use for output
+  -t, --template <path>  Template to use for output [default: built-in template]
       --title <title>    Title to pass to the template [default: Preview]
   -h, --help             Print help
   -V, --version          Print version
