@@ -121,6 +121,7 @@ Plug 'pmeinhardt/ql', {'do': ':QuickLookCompile'}
 Maxdown is built on top of the impressive work of other people:
 
 - markdown-rs: https://github.com/wooorm/markdown-rs
+- minijinja: https://github.com/mitsuhiko/minijinja
 - clap: https://github.com/clap-rs/clap
 - trycmd: https://github.com/assert-rs/trycmd
 - github-markdown-css: https://github.com/sindresorhus/github-markdown-css
