@@ -1,4 +1,5 @@
 version: 2
+
 updates:
   - package-ecosystem: "cargo"
     directory: "/"
@@ -12,3 +13,8 @@ updates:
         update-types:
           - "minor"
           - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
