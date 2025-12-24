@@ -12,5 +12,5 @@ pub fn convert(input: &str, dangerous: bool) -> Result<String, Message> {
         ..markdown::Options::gfm()
     };
 
-    markdown::to_html_with_options(input, &options)
+    markdown::to_html_with_options(input, options)
 }
