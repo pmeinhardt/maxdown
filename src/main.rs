@@ -6,6 +6,7 @@ use anyhow::{Context, Result, anyhow};
 use clap::Parser;
 use minijinja::{Environment, context};
 
+#[allow(clippy::style)]
 mod markdown;
 
 /// The default HTML template embedded into the binary as a string.
@@ -46,7 +47,7 @@ fn main() -> Result<()> {
 
     // Read the Markdown input from a file or from stdin.
     let source = match args.path {
-        Some(ref path) => fs::read_to_string(&path)
+        Some(ref path) => fs::read_to_string(path)
             .with_context(|| format!("Failed to read input from {:?}", path))?,
         None => io::read_to_string(io::stdin()).context("Failed to read from stdin")?,
     };
@@ -56,7 +57,7 @@ fn main() -> Result<()> {
 
     // Read the custom template, if provided, or use the default template.
     let template = match args.template {
-        Some(ref path) => fs::read_to_string(&path)
+        Some(ref path) => fs::read_to_string(path)
             .with_context(|| format!("Failed to read template from {:?}", path))?,
         None => DEFAULT_TEMPLATE.to_string(),
     };
@@ -78,7 +79,7 @@ fn main() -> Result<()> {
     // Direct output to a file, if a path was provided, or to stdout otherwise.
     let mut out: Box<dyn Write> = match args.output {
         Some(ref path) => {
-            let file = File::create(&path)
+            let file = File::create(path)
                 .with_context(|| format!("Failed to open output file {:?}", path))?;
             Box::new(BufWriter::new(file))
         }
