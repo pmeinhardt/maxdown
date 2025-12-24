@@ -48,7 +48,7 @@ fn main() -> Result<()> {
     // Read the Markdown input from a file or from stdin.
     let source = match args.path {
         Some(ref path) => fs::read_to_string(path)
-            .with_context(|| format!("Failed to read input from {:?}", path))?,
+            .with_context(|| format!("Failed to read input from {path:?}"))?,
         None => io::read_to_string(io::stdin()).context("Failed to read from stdin")?,
     };
 
@@ -58,7 +58,7 @@ fn main() -> Result<()> {
     // Read the custom template, if provided, or use the default template.
     let template = match args.template {
         Some(ref path) => fs::read_to_string(path)
-            .with_context(|| format!("Failed to read template from {:?}", path))?,
+            .with_context(|| format!("Failed to read template from {path:?}"))?,
         None => DEFAULT_TEMPLATE.to_string(),
     };
 
@@ -80,7 +80,7 @@ fn main() -> Result<()> {
     let mut out: Box<dyn Write> = match args.output {
         Some(ref path) => {
             let file = File::create(path)
-                .with_context(|| format!("Failed to open output file {:?}", path))?;
+                .with_context(|| format!("Failed to open output file {path:?}"))?;
             Box::new(BufWriter::new(file))
         }
         None => {
@@ -90,7 +90,7 @@ fn main() -> Result<()> {
     };
 
     // Write result to the output destination.
-    write!(out, "{}", result).context("Failed to write output")?;
+    write!(out, "{result}").context("Failed to write output")?;
     out.flush().context("Failed to flush output")?;
 
     Ok(())
