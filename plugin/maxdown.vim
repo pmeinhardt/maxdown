@@ -21,30 +21,40 @@ function! s:exec(cmd, ...)
   endif
 endfunction
 
-function! s:compile() abort
+function! s:compile(bang) abort
+  if a:bang
+    call s:exec('cd ' . s:path . ' && cargo clean')
+  endif
+
   call s:exec('cd ' . s:path . ' && cargo build --release --locked')
 endfunction
 
-function! s:convert() abort
+function! s:convert(bang) abort
   let cmd = s:cmd
 
   let args = [
-        \ '--dangerous',
         \ '--title', shellescape(expand('%:t')),
         \ ]
+
+  if a:bang
+    let args += ['--dangerous']
+  endif
 
   execute '%!' . join([cmd] + args)
 endfunction
 
-function! s:invoke(dest, source, bnum) abort
+function! s:invoke(bang, dest, source, bnum) abort
   let cmd = s:cmd
 
   let args = [
-        \ '--dangerous',
         \ '--base', shellescape(a:source),
         \ '--output', shellescape(a:dest),
         \ '--template', shellescape(s:template),
         \ ]
+
+  if a:bang
+    let args += ['--dangerous']
+  endif
 
   call s:exec(join([cmd] + args), a:bnum)
 endfunction
@@ -63,18 +73,18 @@ function! s:show(fpath, title) abort
   endtry
 endfunction
 
-function! s:preview() abort
+function! s:preview(bang) abort
   let source = expand('%:p')
   let dest = expand('~/.maxdown.preview.html')
-  call s:invoke(dest, source, bufnr('%'))
+  call s:invoke(a:bang, dest, source, bufnr('%'))
   call setfperm(dest, 'rw-------')
   call s:show(dest, expand('%:t'))
 endfunction
 
-nnoremap <silent> <Plug>MaxdownCompile :call <SID>compile()<CR>
-nnoremap <silent> <Plug>MaxdownConvert :call <SID>convert()<CR>
-nnoremap <silent> <Plug>MaxdownPreview :call <SID>preview()<CR>
+nnoremap <silent> <Plug>MaxdownCompile :call <SID>compile(0)<CR>
+nnoremap <silent> <Plug>MaxdownConvert :call <SID>convert(0)<CR>
+nnoremap <silent> <Plug>MaxdownPreview :call <SID>preview(0)<CR>
 
-command! MaxdownCompile call s:compile()
-command! MaxdownConvert call s:convert()
-command! MaxdownPreview call s:preview()
+command! -bang MaxdownCompile call s:compile(<bang>0)
+command! -bang MaxdownConvert call s:convert(<bang>0)
+command! -bang MaxdownPreview call s:preview(<bang>0)
