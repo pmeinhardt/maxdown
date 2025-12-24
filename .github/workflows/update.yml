@@ -18,7 +18,7 @@ jobs:
         run: script/update-preview-template
       - name: Create or update pull-request
         id: create-pull-request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           title: Update preview template 💅
           body: https://github.com/sindresorhus/github-markdown-css
