@@ -2,9 +2,9 @@ use std::fs::{self, File};
 use std::io::{self, BufWriter, Write};
 use std::path::PathBuf;
 
-use anyhow::{anyhow, Context, Result};
+use anyhow::{Context, Result, anyhow};
 use clap::Parser;
-use minijinja::{context, Environment};
+use minijinja::{Environment, context};
 
 mod markdown;
 
