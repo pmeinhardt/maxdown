@@ -7,10 +7,10 @@ edition = "2024"
 # https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = { version = "1.0.100", features = ["std"] }
-clap = { version = "4.5.56", features = ["derive"] }
+anyhow = { version = "1.0.102", features = ["std"] }
+clap = { version = "4.5.60", features = ["derive"] }
 markdown = { version = "1.0.0", features = [], default-features = false }
-minijinja = { version = "2.15.1", features = ["debug", "serde"], default-features = false }
+minijinja = { version = "2.16.0", features = ["debug", "serde"], default-features = false }
 
 [dev-dependencies]
 trycmd = "0.15.11"
