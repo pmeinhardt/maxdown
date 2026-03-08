@@ -13,4 +13,4 @@ markdown = { version = "1.0.0", features = [], default-features = false }
 minijinja = { version = "2.16.0", features = ["debug", "serde"], default-features = false }
 
 [dev-dependencies]
-trycmd = "0.15.11"
+trycmd = "1.0.1"
