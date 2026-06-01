@@ -10,7 +10,7 @@ edition = "2024"
 anyhow = { version = "1.0.102", features = ["std"] }
 clap = { version = "4.6.1", features = ["derive"] }
 markdown = { version = "1.0.0", features = [], default-features = false }
-minijinja = { version = "2.19.0", features = ["debug", "serde"], default-features = false }
+minijinja = { version = "2.20.0", features = ["debug", "serde"], default-features = false }
 
 [dev-dependencies]
 trycmd = "1.2.0"
