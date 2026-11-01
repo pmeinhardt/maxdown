@@ -64,7 +64,14 @@ fn main() -> Result<()> {
 
     // Generate the final HTML output by rendering the template.
     let mut env = Environment::empty();
-    env.set_keep_trailing_newline(true);
+
+    env.set_syntax(
+        env.syntax()
+            .to_builder()
+            .keep_trailing_newline(true)
+            .build()
+            .unwrap(),
+    );
 
     let ctx = context! {
         base => args.base.unwrap_or_default(),
